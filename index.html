@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Наима | UX/UI & Product Designer</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            purple: '#8b5cf6',
+                            violet: '#a855f7',
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            darkBg: '#090d16',
+                            cardBg: 'rgba(15, 23, 42, 0.65)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                        display: ['Syne', 'sans-serif']
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 6s ease-in-out infinite',
+                        'float': 'float 5s ease-in-out infinite',
+                        'spin-slow': 'spin 12s linear infinite'
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+                            '50%': { opacity: '0.7', transform: 'scale(1.1)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .font-display {
+            font-family: 'Syne', sans-serif;
+        }
+
+        /* Glassmorphism Vibe Effects */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .light .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .glass-nav {
+            background: rgba(9, 13, 22, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .light .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        /* Gradient Text and Borders */
+        .gradient-text {
+            background: linear-gradient(135deg, #a855f7 0%, #06b6d4 50%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-border {
+            position: relative;
+            border-radius: 1.5rem;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(6, 182, 212, 0.4));
+            padding: 1px;
+        }
+
+        .gradient-border-inner {
+            border-radius: calc(1.5rem - 1px);
+        }
+
+        /* Noise overlay effect */
+        .bg-noise {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+
+        /* Reveal animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Figma Canvas Simulation */
+        .figma-canvas {
+            background-size: 24px 24px;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px);
+        }
+        .light .figma-canvas {
+            background-image: radial-gradient(circle, rgba(0,0,0,0.12) 1px, transparent 1px);
+        }
+    </style>
+</head>
+
+<body class="bg-[#090d16] text-slate-100 light:bg-slate-50 light:text-slate-900 bg-noise min-h-screen flex flex-col selection:bg-purple-500 selection:text-white">
+
+    <!-- HEADER NAVBAR -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#hero" class="flex items-center gap-3 group">
+                <div class="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-cyan-500 to-emerald-400 p-[1px] transition-transform duration-300 group-hover:scale-105">
+                    <div class="w-full h-full bg-slate-950 light:bg-white rounded-[11px] flex items-center justify-center font-bold text-lg font-display gradient-text">
+                        N
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-display text-lg font-bold tracking-wide">NAIMA</span>
+                    <span class="text-[10px] text-slate-400 light:text-slate-500 font-mono tracking-widest uppercase">UX/UI • Product</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-300 light:text-slate-600">
+                <a href="#about" class="hover:text-purple-400 light:hover:text-purple-600 transition-colors">Обо мне</a>
+                <a href="#experience" class="hover:text-cyan-400 light:hover:text-cyan-600 transition-colors">Bakai Bank</a>
+                <a href="#projects" class="hover:text-emerald-400 light:hover:text-emerald-600 transition-colors">Проекты</a>
+                <a href="#skills" class="hover:text-purple-400 light:hover:text-purple-600 transition-colors">Навыки</a>
+                <a href="#contact" class="hover:text-cyan-400 light:hover:text-cyan-600 transition-colors">Контакты</a>
+            </nav>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-4">
+                <button id="themeToggle" class="p-2.5 rounded-xl glass-card text-slate-300 light:text-slate-600 hover:text-purple-400 transition-all duration-300 focus:outline-none">
+                    <i id="themeIcon" class="fa-solid fa-moon text-lg"></i>
+                </button>
+
+                <a href="#contact" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-purple-600 via-cyan-600 to-emerald-500 hover:opacity-95 shadow-lg shadow-purple-500/20 transition-all duration-300 hover:-translate-y-0.5">
+                    <span>Связаться</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                </a>
+
+                <button id="mobileMenuBtn" class="md:hidden p-2.5 rounded-xl glass-card text-slate-300 light:text-slate-600">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden glass-nav border-t border-slate-800 light:border-slate-200 px-6 py-6 space-y-4">
+            <a href="#about" class="block text-slate-300 light:text-slate-700 hover:text-purple-400 font-medium">Обо мне</a>
+            <a href="#experience" class="block text-slate-300 light:text-slate-700 hover:text-cyan-400 font-medium">Bakai Bank</a>
+            <a href="#projects" class="block text-slate-300 light:text-slate-700 hover:text-emerald-400 font-medium">Проекты</a>
+            <a href="#skills" class="block text-slate-300 light:text-slate-700 hover:text-purple-400 font-medium">Навыки</a>
+            <a href="#contact" class="block text-slate-300 light:text-slate-700 hover:text-cyan-400 font-medium">Контакты</a>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-20">
+        <!-- HERO SECTION -->
+        <section id="hero" class="relative min-h-[92vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16 overflow-hidden">
+            <!-- Animated Glowing Lights -->
+            <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[140px] pointer-events-none animate-pulse-glow"></div>
+            <div class="absolute bottom-10 right-10 w-[450px] h-[450px] bg-cyan-500/15 rounded-full blur-[140px] pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto w-full grid lg:grid-cols-12 gap-12 items-center relative z-10 reveal">
+                <!-- Hero Left Info -->
+                <div class="lg:col-span-7 text-left">
+                    <!-- Status Badge -->
+                    <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-card mb-8 border border-purple-500/30">
+                        <span class="relative flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                        </span>
+                        <span class="text-xs font-mono font-medium tracking-wide text-slate-300 light:text-slate-600">
+                            17 y.o. • 3rd Year @ Compass College • UX/UI & Product
+                        </span>
+                    </div>
+
+                    <!-- Main Title -->
+                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08] mb-6 font-display">
+                        Создаю <span class="gradient-text">удобные</span> цифровые продукты & UX.
+                    </h1>
+
+                    <p class="text-lg sm:text-xl text-slate-300 light:text-slate-600 max-w-2xl mb-10 leading-relaxed font-normal">
+                        Привет! Я <strong class="text-white light:text-slate-900 font-semibold">Наима</strong> — UX/UI и продуктовый дизайнер. Сочетаю исследовательский подход, современный визуал и продуктовое мышление. Прошла стажировку в <strong class="text-cyan-400 light:text-cyan-600 font-semibold">Bakai Bank</strong>.
+                    </p>
+
+                    <!-- CTAs -->
+                    <div class="flex flex-wrap items-center gap-4 mb-12">
+                        <a href="#projects" class="px-8 py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-purple-600 via-cyan-600 to-emerald-500 hover:opacity-95 shadow-xl shadow-purple-500/25 transition-all duration-300 hover:-translate-y-1 flex items-center gap-3">
+                            <span>Смотреть проекты</span>
+                            <i class="fa-solid fa-arrow-down text-sm"></i>
+                        </a>
+                        <a href="#contact" class="px-8 py-4 rounded-2xl font-bold glass-card text-slate-200 light:text-slate-800 hover:bg-white/10 transition-all duration-300 flex items-center gap-2">
+                            <i class="fa-regular fa-comment-dots"></i>
+                            <span>Написать мне</span>
+                        </a>
+                    </div>
+
+                    <!-- Quick Highlights Tags -->
+                    <div class="flex flex-wrap items-center gap-3 text-xs font-mono text-slate-400 light:text-slate-500">
+                        <span class="px-3 py-1.5 rounded-lg glass-card"><i class="fa-solid fa-bolt text-amber-400 mr-2"></i>Product Thinking</span>
+                        <span class="px-3 py-1.5 rounded-lg glass-card"><i class="fa-brands fa-figma text-purple-400 mr-2"></i>Figma Master</span>
+                        <span class="px-3 py-1.5 rounded-lg glass-card"><i class="fa-solid fa-mobile-screen text-cyan-400 mr-2"></i>Fintech UX</span>
+                    </div>
+                </div>
+
+                <!-- Hero Right Interactive Figma Canvas Component -->
+                <div class="lg:col-span-5 relative">
+                    <div class="glass-card rounded-3xl p-4 sm:p-6 figma-canvas relative overflow-hidden border border-slate-700/50 shadow-2xl animate-float">
+                        <!-- Figma Header Toolbar -->
+                        <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-800 light:border-slate-200">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+                                <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
+                                <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+                            </div>
+                            <div class="text-[11px] font-mono text-slate-400 light:text-slate-500 flex items-center gap-2">
+                                <i class="fa-brands fa-figma text-purple-400"></i>
+                                naima_product_workspace.fig
+                            </div>
+                            <div class="text-xs text-slate-500">100%</div>
+                        </div>
+
+                        <!-- Simulated Mobile UI Wireframe Card -->
+                        <div class="space-y-4 relative z-10">
+                            <!-- Floating Designer Cursor -->
+                            <div class="absolute -top-2 right-12 z-20 flex items-center gap-2 animate-bounce">
+                                <i class="fa-solid fa-mouse-pointer text-purple-400 text-lg"></i>
+                                <span class="bg-purple-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg">Naima (UX/UI)</span>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-slate-900/90 light:bg-slate-100 border border-slate-800 light:border-slate-200">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-xs font-semibold text-slate-400">Fintech Mobile Screen</span>
+                                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400">Design System Active</span>
+                                </div>
+                                <div class="h-20 rounded-xl bg-gradient-to-r from-purple-600/30 to-cyan-600/30 border border-dashed border-cyan-500/40 flex items-center justify-center p-3">
+                                    <div class="w-full flex items-center justify-between">
+                                        <div class="space-y-1">
+                                            <div class="h-3 w-24 bg-slate-200 light:bg-slate-700 rounded"></div>
+                                            <div class="h-2 w-16 bg-slate-400/50 rounded"></div>
+                                        </div>
+                                        <div class="w-8 h-8 rounded-full bg-cyan-500/40 flex items-center justify-center text-xs text-white">
+                                            <i class="fa-solid fa-wallet"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- User Flow Connectors -->
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="p-3 rounded-xl bg-slate-900/60 light:bg-white border border-slate-800 light:border-slate-200 text-xs">
+                                    <div class="flex items-center gap-2 mb-2 text-slate-300 light:text-slate-700 font-semibold">
+                                        <i class="fa-solid fa-magnifying-glass text-purple-400"></i> User Research
+                                    </div>
+                                    <p class="text-[11px] text-slate-400">Исследование болей пользователей банка</p>
+                                </div>
+                                <div class="p-3 rounded-xl bg-slate-900/60 light:bg-white border border-slate-800 light:border-slate-200 text-xs">
+                                    <div class="flex items-center gap-2 mb-2 text-slate-300 light:text-slate-700 font-semibold">
+                                        <i class="fa-solid fa-layer-group text-cyan-400"></i> UI Kit
+                                    </div>
+                                    <p class="text-[11px] text-slate-400">Компоненты и гайдлайны</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT & FACTS SECTION (BENTO GRID STYLE) -->
+        <section id="about" class="py-24 px-4 sm:px-6 lg:px-8 relative">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16 reveal">
+                    <h2 class="text-xs uppercase tracking-widest font-mono font-semibold text-purple-400 light:text-purple-600 mb-3">
+                        // БИОГРАФИЯ & ФАКТЫ
+                    </h2>
+                    <p class="text-3xl sm:text-5xl font-bold font-display">Обо мне в деталях</p>
+                </div>
+
+                <!-- Bento Grid Layout -->
+                <div class="grid md:grid-cols-12 gap-6">
+                    <!-- Bento 1: Education (Compass College) -->
+                    <div class="md:col-span-7 glass-card p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between border-l-4 border-l-purple-500 reveal">
+                        <div>
+                            <div class="flex items-center justify-between mb-6">
+                                <span class="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-purple-500/10 text-purple-400">
+                                    3 курс • Compass College
+                                </span>
+                                <i class="fa-solid fa-graduation-cap text-2xl text-purple-400"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold font-display mb-3">Compass College — IT & Продуктовый дизайн</h3>
+                            <p class="text-slate-300 light:text-slate-600 text-sm leading-relaxed mb-6">
+                                Учусь на 3-м курсе направления <strong class="text-white light:text-slate-900">«IT и продуктивный дизайн»</strong>. Колледж дает сильную фундаментальную базу: проектирование цифровых продуктов, информационная архитектура, исследование аудитории и веб-технологии.
+                            </p>
+                        </div>
+                        <div class="grid sm:grid-cols-2 gap-3 text-xs font-mono text-slate-400 light:text-slate-500 pt-4 border-t border-slate-800 light:border-slate-200">
+                            <div><i class="fa-solid fa-check text-purple-400 mr-2"></i>UX Research & User Testing</div>
+                            <div><i class="fa-solid fa-check text-purple-400 mr-2"></i>Product Thinking</div>
+                        </div>
+                    </div>
+
+                    <!-- Bento 2: Age & Drive -->
+                    <div class="md:col-span-5 glass-card p-8 rounded-3xl flex flex-col justify-between border-l-4 border-l-cyan-500 reveal">
+                        <div>
+                            <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-2xl mb-6">
+                                <i class="fa-solid fa-fire"></i>
+                            </div>
+                            <div class="text-4xl font-extrabold font-display gradient-text mb-2">17 Лет</div>
+                            <h3 class="text-xl font-bold mb-2">Молодой & Амбициозный специалист</h3>
+                            <p class="text-slate-300 light:text-slate-600 text-sm leading-relaxed">
+                                В свои 17 лет я уже совмещаю академическую учебу с реальной практикой в крупном банке, создавая дизайн, который решает задачи бизнеса и пользователей.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Bento 3: Design Mindset -->
+                    <div class="md:col-span-4 glass-card p-8 rounded-3xl reveal">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-palette"></i>
+                        </div>
+                        <h4 class="text-lg font-bold mb-2">Чистый & Понятный UI</h4>
+                        <p class="text-xs text-slate-400 light:text-slate-500 leading-relaxed">
+                            Люблю минимализм, аккуратные типографику, доступность (Accessibility) и единые дизайн-системы.
+                        </p>
+                    </div>
+
+                    <!-- Bento 4: Tools & Vibe -->
+                    <div class="md:col-span-8 glass-card p-8 rounded-3xl reveal">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-lg font-bold">Инструменты & Vibe Coding</h4>
+                            <i class="fa-solid fa-code text-cyan-400"></i>
+                        </div>
+                        <p class="text-xs text-slate-400 light:text-slate-500 mb-6">
+                            Работаю в Figma, проектирую интерактивные прототипы в FigJam, понимаю основы HTML/CSS, что помогает говорить с разработчиками на одном языке.
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-xs font-mono">
+                            <span class="px-3 py-1.5 rounded-xl bg-purple-500/10 text-purple-300 border border-purple-500/20">Figma</span>
+                            <span class="px-3 py-1.5 rounded-xl bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">FigJam</span>
+                            <span class="px-3 py-1.5 rounded-xl bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">Prototyping</span>
+                            <span class="px-3 py-1.5 rounded-xl bg-amber-500/10 text-amber-300 border border-amber-500/20">User Flow</span>
+                            <span class="px-3 py-1.5 rounded-xl bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">HTML/CSS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE SECTION (BAKAI BANK INTERNSHIP) -->
+        <section id="experience" class="py-24 px-4 sm:px-6 lg:px-8 bg-slate-900/30 light:bg-slate-100/50 relative">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16 reveal">
+                    <h2 class="text-xs uppercase tracking-widest font-mono font-semibold text-cyan-400 light:text-cyan-600 mb-3">
+                        // ПРАКТИКА И ОПЫТ
+                    </h2>
+                    <p class="text-3xl sm:text-5xl font-bold font-display">Стажировка в Bakai Bank</p>
+                </div>
+
+                <div class="glass-card p-8 sm:p-12 rounded-3xl relative overflow-hidden border-t-4 border-t-cyan-500 reveal">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-10 pb-8 border-b border-slate-800 light:border-slate-200">
+                        <div class="flex items-start gap-5">
+                            <div class="w-16 h-16 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-3xl shrink-0">
+                                <i class="fa-solid fa-building-columns"></i>
+                            </div>
+                            <div>
+                                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono bg-cyan-500/10 text-cyan-400 font-semibold mb-2">
+                                    ОАО «Бакай Банк» (Bakai Bank)
+                                </span>
+                                <h3 class="text-2xl sm:text-3xl font-bold font-display">UX/UI Designer Intern</h3>
+                                <p class="text-slate-400 text-sm font-medium">Стажировка на позиции продуктового UX/UI дизайнера • 1 месяц</p>
+                            </div>
+                        </div>
+                        <div class="px-4 py-2 rounded-xl bg-slate-900 light:bg-white text-xs font-mono text-cyan-400 border border-cyan-500/30 self-start">
+                            <i class="fa-regular fa-clock mr-2"></i>Интенсивный практический опыт
+                        </div>
+                    </div>
+
+                    <p class="text-slate-300 light:text-slate-600 leading-relaxed mb-10 text-base sm:text-lg">
+                        В течение 1 месяца прохождения стажировки в <strong>Bakai Bank</strong> я погрузилась в реальный финтех-продукт, анализировала пользовательские пути клиентов банка и разрабатывала новые интерфейсные решения.
+                    </p>
+
+                    <!-- Internship Accomplishments Grid -->
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="p-6 rounded-2xl bg-slate-900/60 light:bg-white border border-slate-800 light:border-slate-200">
+                            <div class="text-cyan-400 text-xl mb-3"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                            <h4 class="font-bold text-base mb-2">Редизайн экранов</h4>
+                            <p class="text-xs text-slate-400 light:text-slate-500 leading-relaxed">
+                                Проектирование и оптимизация интерфейсных экранов для мобильного банкинга.
+                            </p>
+                        </div>
+
+                        <div class="p-6 rounded-2xl bg-slate-900/60 light:bg-white border border-slate-800 light:border-slate-200">
+                            <div class="text-purple-400 text-xl mb-3"><i class="fa-solid fa-sitemap"></i></div>
+                            <h4 class="font-bold text-base mb-2">User Flows & CJM</h4>
+                            <p class="text-xs text-slate-400 light:text-slate-500 leading-relaxed">
+                                Составление сценариев использования и упрощение пользовательских путей для быстрой оплаты и переводов.
+                            </p>
+                        </div>
+
+                        <div class="p-6 rounded-2xl bg-slate-900/60 light:bg-white border border-slate-800 light:border-slate-200">
+                            <div class="text-emerald-400 text-xl mb-3"><i class="fa-solid fa-swatchbook"></i></div>
+                            <h4 class="font-bold text-base mb-2">Работа с Дизайн-Системой</h4>
+                            <p class="text-xs text-slate-400 light:text-slate-500 leading-relaxed">
+                                Использование гайдлайнов и брендинга Бакай Банка при создании UI элементов и конпонентов.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS SHOWCASE SECTION -->
+        <section id="projects" class="py-24 px-4 sm:px-6 lg:px-8 relative">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16 reveal">
+                    <h2 class="text-xs uppercase tracking-widest font-mono font-semibold text-emerald-400 light:text-emerald-600 mb-3">
+                        // КЕЙСЫ & ПРОЕКТЫ
+                    </h2>
+                    <p class="text-3xl sm:text-5xl font-bold font-display">Мои избранные работы</p>
+                </div>
+
+                <!-- Projects Grid -->
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Project 1: Bakai Concept -->
+                    <div class="glass-card rounded-3xl overflow-hidden group hover:border-cyan-500/50 transition-all duration-300 reveal flex flex-col justify-between">
+                        <div>
+                            <div class="h-52 bg-gradient-to-tr from-cyan-900/40 via-slate-900 to-purple-900/40 p-6 flex flex-col justify-between relative overflow-hidden">
+                                <div class="flex justify-between items-center z-10">
+                                    <span class="px-3 py-1 rounded-full text-[10px] font-mono bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30">Fintech UX</span>
+                                    <i class="fa-brands fa-figma text-xl text-slate-400 group-hover:text-cyan-400 transition-colors"></i>
+                                </div>
+                                <div class="z-10">
+                                    <div class="text-2xl font-bold font-display text-white mb-1">Bakai Mobile App</div>
+                                    <div class="text-xs text-slate-300">UX/UI Concept Study</div>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <p class="text-xs text-slate-400 light:text-slate-500 leading-relaxed mb-4">
+                                    Концепт обновленного главного экрана и истории операций для клиентов банка с акцентом на быструю навигацию.
+                                </p>
+                                <div class="flex flex-wrap gap-2 text-[11px] font-mono text-slate-400 mb-6">
+                                    <span>#Fintech</span>
+                                    <span>#iOS Design</span>
+                                    <span>#Figma</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="px-6 pb-6 pt-0">
+                            <button onclick="openModal('Bakai Mobile App Concept', 'Концептуальный проект редизайна мобильного банкинга: разработка чистой иерархии, адаптивного нижнего бара навигации и карточек быстрой оплаты.')" class="w-full py-3 rounded-xl glass-card text-xs font-bold text-cyan-400 hover:bg-cyan-500/10 transition-colors flex items-center justify-center gap-2">
+                                <span>Детали кейса</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Project 2: Compass Student Hub -->
+                    <div class="glass-card rounded-3xl overflow-hidden group hover:border-purple-500/50 transition-all duration-300 reveal flex flex-col justify-between">
+                        <div>
+                            <div class="h-52 bg-gradient-to-tr from-purple-900/40 via-slate-900 to-emerald-900/40 p-6 flex flex-col justify-between relative overflow-hidden">
+                                <div class="flex justify-between items-center z-10">
+                                    <span class="px-3 py-1 rounded-full text-[10px] font-mono bg-purple-500/20 text-purple-300 font-bold border border-purple-500/30">EdTech Product</span>
+                                    <i class="fa-brands fa-figma text-xl text-slate-400 group-hover:text-purple-400 transition-colors"></i>
+                                </div>
+                                <div class="z-10">
+                                    <div class="text-2xl font-bold font-display text-white mb-1">Student Hub App</div>
+                                    <div class="text-xs text-slate-300">Compass College Project</div>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <p class="text-xs text-slate-400 light:text-slate-500 leading-relaxed mb-4">
+                                    Мобильное приложение для студентов: расписание, сдача домашних заданий и трекинг успеваемости.
+                                </p>
+                                <div class="flex flex-wrap gap-2 text-[11px] font-mono text-slate-400 mb-6">
+                                    <span>#EdTech</span>
+                                    <span>#User Research</span>
+                                    <span>#UI Kit</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="px-6 pb-6 pt-0">
+                            <button onclick="openModal('Student Hub App', 'Учебный проект в Compass College. Проведены интервью со студентами, спроектирован удобный календарь занятий и уведомления о дедлайнах.')" class="w-full py-3 rounded-xl glass-card text-xs font-bold text-purple-400 hover:bg-purple-500/10 transition-colors flex items-center justify-center gap-2">
+                                <span>Детали кейса</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Project 3: Design System & UI Kit -->
+                    <div class="glass-card rounded-3xl overflow-hidden group hover:border-emerald-500/50 transition-all duration-300 reveal flex flex-col justify-between">
+                        <div>
+                            <div class="h-52 bg-gradient-to-tr from-emerald-900/40 via-slate-900 to-cyan-900/40 p-6 flex flex-col justify-between relative overflow-hidden">
+                                <div class="flex justify-between items-center z-10">
+                                    <span class="px-3 py-1 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">Design System</span>
+                                    <i class="fa-brands fa-figma text-xl text-slate-400 group-hover:text-emerald-400 transition-colors"></i>
+                                </div>
+                                <div class="z-10">
+                                    <div class="text-2xl font-bold font-display text-white mb-1">Vibe Design System</div>
+                                    <div class="text-xs text-slate-300">Reusable Figma UI Kit</div>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <p class="text-xs text-slate-400 light:text-slate-500 leading-relaxed mb-4">
+                                    Набор токенов, компонентов, состояний кнопок и типографики для быстрой сборки веб и мобильных интерфейсов.
+                                </p>
+                                <div class="flex flex-wrap gap-2 text-[11px] font-mono text-slate-400 mb-6">
+                                    <span>#Components</span>
+                                    <span>#Tokens</span>
+                                    <span>#Dark Mode</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="px-6 pb-6 pt-0">
+                            <button onclick="openModal('Vibe Design System', 'Масштабируемая система компонентов с поддержкой Auto Layout 5.0, вариантов, темной и светлой темы.')" class="w-full py-3 rounded-xl glass-card text-xs font-bold text-emerald-400 hover:bg-emerald-500/10 transition-colors flex items-center justify-center gap-2">
+                                <span>Детали кейса</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILLS SECTION -->
+        <section id="skills" class="py-24 px-4 sm:px-6 lg:px-8 bg-slate-900/30 light:bg-slate-100/50 relative">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16 reveal">
+                    <h2 class="text-xs uppercase tracking-widest font-mono font-semibold text-purple-400 light:text-purple-600 mb-3">
+                        // НАВЫКИ & ТЕХНОЛОГИИ
+                    </h2>
+                    <p class="text-3xl sm:text-5xl font-bold font-display">Профессиональный стек</p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glass-card p-6 rounded-2xl reveal">
+                        <i class="fa-brands fa-figma text-3xl text-purple-400 mb-4"></i>
+                        <h3 class="font-bold text-lg mb-2">Figma & FigJam</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Auto-layout, Components, Variants, Interactive Prototypes.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl reveal">
+                        <i class="fa-solid fa-users-viewfinder text-3xl text-cyan-400 mb-4"></i>
+                        <h3 class="font-bold text-lg mb-2">UX Research</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Интервью пользователей, карты CJM, построение User Flow.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl reveal">
+                        <i class="fa-solid fa-layer-group text-3xl text-emerald-400 mb-4"></i>
+                        <h3 class="font-bold text-lg mb-2">Design Systems</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Создание и поддержка токенов, библиотека UI элементов.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl reveal">
+                        <i class="fa-solid fa-code text-3xl text-amber-400 mb-4"></i>
+                        <h3 class="font-bold text-lg mb-2">HTML / CSS Basics</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Понимание верстки для бесшовной передачи макетов разработчикам.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" class="py-24 px-4 sm:px-6 lg:px-8 relative">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-5 reveal">
+                        <h2 class="text-xs uppercase tracking-widest font-mono font-semibold text-cyan-400 mb-3">// КОНТАКТЫ</h2>
+                        <h3 class="text-3xl sm:text-5xl font-bold font-display mb-6">Создадим продукт вместе?</h3>
+                        <p class="text-slate-300 light:text-slate-600 text-sm leading-relaxed mb-8">
+                            Я открыта к предложениям по Junior UX/UI позициям, стажировкам и интересным продуктовым проектам.
+                        </p>
+
+                        <div class="space-y-4 font-mono text-sm">
+                            <div class="flex items-center gap-4 p-4 rounded-2xl glass-card">
+                                <i class="fa-brands fa-telegram text-xl text-cyan-400"></i>
+                                <span>Telegram: @naima_uiux</span>
+                            </div>
+                            <div class="flex items-center gap-4 p-4 rounded-2xl glass-card">
+                                <i class="fa-regular fa-envelope text-xl text-purple-400"></i>
+                                <span>Email: naima.design@example.com</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7 glass-card p-8 rounded-3xl reveal">
+                        <form id="contactForm" class="space-y-6">
+                            <div class="grid sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-mono text-slate-300 light:text-slate-700 mb-2">Имя</label>
+                                    <input type="text" required class="w-full px-4 py-3 rounded-xl bg-slate-900/80 light:bg-white border border-slate-700 light:border-slate-300 text-sm focus:outline-none focus:border-purple-500" placeholder="Александр">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-mono text-slate-300 light:text-slate-700 mb-2">Email / Telegram</label>
+                                    <input type="text" required class="w-full px-4 py-3 rounded-xl bg-slate-900/80 light:bg-white border border-slate-700 light:border-slate-300 text-sm focus:outline-none focus:border-purple-500" placeholder="@username">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-mono text-slate-300 light:text-slate-700 mb-2">Сообщение</label>
+                                <textarea rows="4" required class="w-full px-4 py-3 rounded-xl bg-slate-900/80 light:bg-white border border-slate-700 light:border-slate-300 text-sm focus:outline-none focus:border-purple-500" placeholder="Привет, Наима! Хотим обсудить UX проект..."></textarea>
+                            </div>
+                            <button type="submit" class="w-full py-4 rounded-xl font-bold text-white bg-gradient-to-r from-purple-600 via-cyan-600 to-emerald-500 hover:opacity-95 transition-all duration-300 shadow-lg shadow-purple-500/20">
+                                Отправить сообщение
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="py-8 border-t border-slate-800/80 light:border-slate-200 text-center text-xs font-mono text-slate-500">
+        <p>© 2026 NAIMA • Compass College & Bakai Bank UX Internship</p>
+    </footer>
+
+    <!-- CASE STUDY MODAL -->
+    <div id="projectModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="glass-card max-w-lg w-full p-8 rounded-3xl relative border border-purple-500/30">
+            <button onclick="closeModal()" class="absolute top-6 right-6 text-slate-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 id="modalTitle" class="text-2xl font-bold font-display mb-4 gradient-text"></h3>
+            <p id="modalDesc" class="text-slate-300 text-sm leading-relaxed mb-6"></p>
+            <button onclick="closeModal()" class="w-full py-3 rounded-xl bg-purple-600 text-white font-bold text-xs">
+                Понятно
+            </button>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="glass-card px-6 py-4 rounded-2xl border border-emerald-500/40 flex items-center gap-4 bg-slate-900 text-white shadow-2xl">
+            <i class="fa-solid fa-circle-check text-emerald-400 text-xl"></i>
+            <div>
+                <div class="font-bold text-xs">Сообщение отправлено!</div>
+                <div class="text-[11px] text-slate-400">Наима скоро свяжется с вами.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+        // 2. Theme Toggle (Dark/Light)
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            document.documentElement.classList.toggle('light');
+            themeIcon.classList.toggle('fa-moon');
+            themeIcon.classList.toggle('fa-sun');
+        });
+
+        // 3. Scroll Reveal Animation
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const elementTop = el.getBoundingClientRect().top;
+                if (elementTop < windowHeight - 60) {
+                    el.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', reveal);
+        window.addEventListener('load', reveal);
+
+        // 4. Modal Handler
+        function openModal(title, desc) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDesc').innerText = desc;
+            const modal = document.getElementById('projectModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+        function closeModal() {
+            const modal = document.getElementById('projectModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        // 5. Contact Form Toast
+        const contactForm = document.getElementById('contactForm');
+        const toast = document.getElementById('toast');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            contactForm.reset();
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 4000);
+        });
+    </script>
+</body>
+</html>
