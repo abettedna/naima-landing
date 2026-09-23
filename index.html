@@ -6,6 +6,9 @@
     <title>Наима | UX/UI & Product Designer</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -167,6 +170,11 @@
             <div class="flex items-center gap-4">
                 <button id="themeToggle" class="p-2.5 rounded-xl glass-card text-slate-300 hover:text-purple-400 transition-all duration-300 focus:outline-none" aria-label="Переключить тему">
                     <i id="themeIcon" class="fa-solid fa-moon text-lg"></i>
+                </button>
+
+                <button id="authBtn" onclick="openAuthModal()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold glass-card text-slate-200 hover:text-cyan-400 transition-all duration-300">
+                    <i class="fa-solid fa-user text-sm"></i>
+                    <span id="authBtnText">Войти</span>
                 </button>
 
                 <a href="#contact" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-purple-600 via-cyan-600 to-emerald-500 hover:opacity-95 shadow-lg shadow-purple-500/20 transition-all duration-300 hover:-translate-y-0.5">
@@ -663,6 +671,33 @@
         </div>
     </div>
 
+    <!-- AUTH MODAL -->
+    <div id="authModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="glass-card max-w-md w-full p-8 rounded-3xl border border-purple-500/30 relative">
+            <button onclick="closeAuthModal()" class="absolute top-6 right-6 text-slate-400 hover:text-white text-xl" aria-label="Закрыть">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h3 id="authModalTitle" class="text-2xl font-bold font-display mb-6 gradient-text">Вход</h3>
+
+            <div id="authError" class="hidden text-xs text-red-400 bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-2 mb-4"></div>
+
+            <div class="space-y-4">
+                <input id="authEmail" type="email" placeholder="Email" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-sm text-slate-100 focus:outline-none focus:border-purple-500">
+                <input id="authPassword" type="password" placeholder="Пароль" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-sm text-slate-100 focus:outline-none focus:border-purple-500">
+            </div>
+
+            <button id="authSubmitBtn" onclick="submitAuth()" class="w-full mt-6 px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 via-cyan-600 to-emerald-500 text-white font-bold text-sm hover:opacity-95 transition-all">
+                Войти
+            </button>
+
+            <p class="text-xs text-slate-400 text-center mt-4">
+                <span id="authSwitchText">Нет аккаунта?</span>
+                <a href="#" onclick="toggleAuthMode(event)" id="authSwitchLink" class="text-cyan-400 font-semibold hover:underline">Зарегистрироваться</a>
+            </p>
+        </div>
+    </div>
+
     <!-- SCRIPTS -->
     <script>
         // Toggle Theme
@@ -713,6 +748,72 @@
         function closeModal() {
             document.getElementById('projectModal').classList.add('hidden');
         }
+
+        // ==== FIREBASE AUTH ====
+        const firebaseConfig = {
+            apiKey: "AIzaSyAeM95QIlWp2UOQ4KbgD5Clpnknt1FD3TM",
+            authDomain: "landing-naima.firebaseapp.com",
+            projectId: "landing-naima",
+            storageBucket: "landing-naima.firebasestorage.app",
+            messagingSenderId: "25602911767",
+            appId: "1:25602911767:web:065d73ee9558d9a722f652",
+            measurementId: "G-Q24PTPGD39"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        let isLoginMode = true;
+
+        function openAuthModal() {
+            document.getElementById('authModal').classList.remove('hidden');
+        }
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+            document.getElementById('authError').classList.add('hidden');
+        }
+
+        function toggleAuthMode(e) {
+            e.preventDefault();
+            isLoginMode = !isLoginMode;
+            document.getElementById('authModalTitle').innerText = isLoginMode ? 'Вход' : 'Регистрация';
+            document.getElementById('authSubmitBtn').innerText = isLoginMode ? 'Войти' : 'Зарегистрироваться';
+            document.getElementById('authSwitchText').innerText = isLoginMode ? 'Нет аккаунта?' : 'Уже есть аккаунт?';
+            document.getElementById('authSwitchLink').innerText = isLoginMode ? 'Зарегистрироваться' : 'Войти';
+        }
+
+        function submitAuth() {
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            const errorBox = document.getElementById('authError');
+            errorBox.classList.add('hidden');
+
+            const action = isLoginMode
+                ? auth.signInWithEmailAndPassword(email, password)
+                : auth.createUserWithEmailAndPassword(email, password);
+
+            action
+                .then(() => closeAuthModal())
+                .catch((err) => {
+                    errorBox.innerText = err.message;
+                    errorBox.classList.remove('hidden');
+                });
+        }
+
+        function logout() {
+            auth.signOut();
+        }
+
+        auth.onAuthStateChanged((user) => {
+            const btn = document.getElementById('authBtn');
+            const btnText = document.getElementById('authBtnText');
+            if (user) {
+                btnText.innerText = user.email.split('@')[0];
+                btn.onclick = logout;
+            } else {
+                btnText.innerText = 'Войти';
+                btn.onclick = openAuthModal;
+            }
+        });
     </script>
 </body>
 </html>
